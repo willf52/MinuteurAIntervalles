@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Minuteur à intervalles</title>
+</head>
+<body>
+    <div id="minuteur">
+        <h1>Minuteur</h1>
+
+        <form>
+            <label>HH
+                <input id="heure" max=12 min=0 type="number" value="0">
+            </label>
+            <label>MM
+                <input id="minute" max=59 min=0 type="number" value="0">
+            </label>
+            <label>SS
+                <input id="seconde" max=59 min=0 type="number" value="0">
+            </label>
+            <button id="boutonMinuteurValider" onclick="validerMinuteur()" type="submit">Lancer</button>
+            <button id="boutonMinuteurReset" onclick="resetMinuteur()" type="reset">Reset</button>
+        </form>
+    </div>
+
+    <div id="intervalle">
+        <div id="parametre">
+            <h1>Minuteur à intervalles</h1>
+
+            <label>Travail
+                <input max=59 min=0 type="number"> : <input max=59 min=0 type="number">
+            </label>
+            <label>Repos
+                <input max=59 min=0 type="number"> : <input max=59 min=0 type="number">
+            </label>
+            <label>Transition
+                <input max=10 min=0 type="number">
+            </label>
+            <label>Nombre de series
+                <input min="1" type="number">
+            </label>
+        </div>
+        <div id="series">
+        </div>
+    </div>
+    <script src="parametrage.js"></script>
+
+</body>
+</html>
