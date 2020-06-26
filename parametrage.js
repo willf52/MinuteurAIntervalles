@@ -87,6 +87,15 @@ function resetUnit (elmt) {
 // boutonResetMinuteur.addEventListener("click", resetMinuteur);
 
 
+// Annuler l'envoi automatique des formulaire sur une autre page
+let forms = document.getElementsByTagName("form");
+for (let f of forms) {
+    f.addEventListener("submit", function (e) {
+        e.preventDefault();
+    });
+}
+
+
 
 
 // TODO: suite du cours pour pouvoir afficher le chrono
