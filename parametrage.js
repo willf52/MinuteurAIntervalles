@@ -1,6 +1,6 @@
 function validerMinuteur () {
 
-    let minuteur = document.getElementById("minuteur");
+    //let minuteur = document.getElementById("minuteur");
 
     let heure = document.querySelector("#minuteur #heure");
     let minute = document.querySelector("#minuteur #minute");
@@ -16,11 +16,6 @@ function validerMinuteur () {
     minuteurElmt.id = "affichageMinuteur";
     minuteurElmt.textContent += `${heure.value}:${minute.value}:${seconde.value}`;
 
-    if (existe("affichageMinuteur")) {
-        minuteur.replaceChild(minuteurElmt, document.getElementById("affichageMinuteur"));
-    } else {
-        minuteur.appendChild(minuteurElmt);
-    }
 }
 
 function existe (id) {
@@ -61,24 +56,7 @@ function verif (n, type) {
 
 }
 
-function resetMinuteur() {
-    let minuteur = document.getElementById("minuteur");
 
-    let heure = document.querySelector("#minuteur #heure");
-    let minute = document.querySelector("#minuteur #minute");
-    let seconde = document.querySelector("#minuteur #seconde");
-
-    resetUnit(heure);
-    resetUnit(minute);
-    resetUnit(seconde);
-
-    if (existe("affichageMinuteur"))
-        minuteur.removeChild(document.getElementById("affichageMinuteur"));
-}
-
-function resetUnit (elmt) {
-    elmt.value = 0;
-}
 
 // let boutonMinuteur = document.getElementById("boutonMinuteurValider");
 // boutonMinuteur.addEventListener("click", minuteur);
@@ -87,23 +65,6 @@ function resetUnit (elmt) {
 // boutonResetMinuteur.addEventListener("click", resetMinuteur);
 
 
-// Annuler l'envoi automatique des formulaire sur une autre page
-let forms = document.getElementsByTagName("form");
-for (let f of forms) {
-    f.addEventListener("submit", function (e) {
-        e.preventDefault();
-    });
-}
 
-
-// TODO: fonctionne presque mais à voir plus tard comment ca va se passer avec l'affichage (besoin en nb ou ok en texte ?)
-// let champs = document.querySelectorAll("#minuteur input");
-// for (let ch of champs) {
-//     ch.addEventListener("blur", function () {
-//         if (ch.value.length === 1) {
-//             ch.value = "0" + ch.value;
-//         }
-//     });
-// }
 
 // TODO: suite du cours pour pouvoir afficher le chrono
