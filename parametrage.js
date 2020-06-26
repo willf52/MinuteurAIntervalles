@@ -1,6 +1,6 @@
 function validerMinuteur () {
 
-    //let minuteur = document.getElementById("minuteur");
+    let minuteur = document.getElementById("minuteur");
 
     let heure = document.querySelector("#minuteur #heure");
     let minute = document.querySelector("#minuteur #minute");
@@ -16,6 +16,11 @@ function validerMinuteur () {
     minuteurElmt.id = "affichageMinuteur";
     minuteurElmt.textContent += `${heure.value}:${minute.value}:${seconde.value}`;
 
+    if (existe("affichageMinuteur")) {
+        minuteur.replaceChild(minuteurElmt, document.getElementById("affichageMinuteur"));
+    } else {
+        minuteur.appendChild(minuteurElmt);
+    }
 }
 
 function existe (id) {
@@ -56,7 +61,24 @@ function verif (n, type) {
 
 }
 
+function resetMinuteur() {
+    let minuteur = document.getElementById("minuteur");
 
+    let heure = document.querySelector("#minuteur #heure");
+    let minute = document.querySelector("#minuteur #minute");
+    let seconde = document.querySelector("#minuteur #seconde");
+
+    resetUnit(heure);
+    resetUnit(minute);
+    resetUnit(seconde);
+
+    if (existe("affichageMinuteur"))
+        minuteur.removeChild(document.getElementById("affichageMinuteur"));
+}
+
+function resetUnit (elmt) {
+    elmt.value = 0;
+}
 
 // let boutonMinuteur = document.getElementById("boutonMinuteurValider");
 // boutonMinuteur.addEventListener("click", minuteur);
