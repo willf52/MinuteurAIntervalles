@@ -96,6 +96,18 @@ for (let f of forms) {
 }
 
 
+// Défilement du minuteur
+function temps(elmt) {
+    if (parseInt(elmt.textContent) > 0){
+        setTimeout(temps, 1000, elmt);
+        elmt.textContent = parseInt(elmt.textContent) - 1;
+    }
+
+}
+
+temps(document.getElementById("testtemps"));
+
+
 
 
 // TODO: suite du cours pour pouvoir afficher le chrono
