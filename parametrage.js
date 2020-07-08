@@ -21,6 +21,9 @@ function validerMinuteur () {
     } else {
         minuteur.appendChild(minuteurElmt);
     }
+
+    let affichageMinuteurElmt = document.getElementById("affichageMinuteur");
+    setTimeout(fctMinuteur, 1000, affichageMinuteurElmt);
 }
 
 function existe (id) {
@@ -97,15 +100,44 @@ for (let f of forms) {
 
 
 // Défilement du minuteur
-function temps(elmt) {
-    if (parseInt(elmt.textContent) > 0){
-        setTimeout(temps, 1000, elmt);
-        elmt.textContent = parseInt(elmt.textContent) - 1;
+function fctMinuteur(elmt) {
+    let time = elmt.textContent.split(":");
+
+    let heure = parseInt(time[0]);
+    let minute = parseInt(time[1]);
+    let seconde = parseInt(time[2]);
+
+    if (seconde > 0) {
+        seconde -= 1;
+
+    } else {
+        if (minute > 0) {
+            minute -= 1;
+            seconde = 59;
+
+        } else {
+            if (heure > 0) {
+                heure -= 1;
+                minute = 59;
+                seconde = 59;
+
+            }
+        }
+    }
+    elmt.textContent = `${heure}:${minute}:${seconde}`;
+    setTimeout(fctMinuteur, 1000, elmt);
+}
+
+class Minuteur {
+    constructor (heure, minute, seconde) {
+        this.heure = heure;
+        this.minute = minute;
+        this.seconde = seconde;
     }
 
 }
 
-temps(document.getElementById("testtemps"));
+
 
 
 
