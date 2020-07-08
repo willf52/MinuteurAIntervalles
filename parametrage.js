@@ -1,20 +1,22 @@
 function validerMinuteur () {
 
-    let minuteur = document.getElementById("minuteur");
+    let minuteur = document.getElementById("minuteurSimple");
 
-    let heure = document.querySelector("#minuteur #heure");
-    let minute = document.querySelector("#minuteur #minute");
-    let seconde = document.querySelector("#minuteur #seconde");
+    let heureElmt = document.querySelector("#minuteurSimple #heure");
+    let minuteElmt = document.querySelector("#minuteurSimple #minute");
+    let secondeElmt = document.querySelector("#minuteurSimple #seconde");
 
 
-    heure.value = verif(heure.value, "heure");
-    minute.value = verif(minute.value, "minute");
-    seconde.value = verif(seconde.value, "seconde");
+    heureElmt.value = verif(heureElmt.value, "heure");
+    minuteElmt.value = verif(minuteElmt.value, "minute");
+    secondeElmt.value = verif(secondeElmt.value, "seconde");
 
+    let minuteurObjet = new Minuteur(parseInt(heureElmt.value), parseInt(minuteElmt.value), parseInt(secondeElmt.value));
 
     let minuteurElmt = document.createElement("p");
     minuteurElmt.id = "affichageMinuteur";
-    minuteurElmt.textContent += `${heure.value}:${minute.value}:${seconde.value}`;
+    minuteurElmt.textContent += `${minuteurObjet.heure}:${minuteurObjet.minute}:${minuteurObjet.seconde}`;
+
 
     if (existe("affichageMinuteur")) {
         minuteur.replaceChild(minuteurElmt, document.getElementById("affichageMinuteur"));
@@ -23,7 +25,7 @@ function validerMinuteur () {
     }
 
     let affichageMinuteurElmt = document.getElementById("affichageMinuteur");
-    setTimeout(fctMinuteur, 1000, affichageMinuteurElmt);
+    setTimeout(Minuteur.fctMinuteur, 1000, minuteurObjet, affichageMinuteurElmt);
 }
 
 function existe (id) {
@@ -99,47 +101,17 @@ for (let f of forms) {
 }
 
 
-// Défilement du minuteur
-function fctMinuteur(elmt) {
-    let time = elmt.textContent.split(":");
-
-    let heure = parseInt(time[0]);
-    let minute = parseInt(time[1]);
-    let seconde = parseInt(time[2]);
-
-    if (seconde > 0) {
-        seconde -= 1;
-
-    } else {
-        if (minute > 0) {
-            minute -= 1;
-            seconde = 59;
-
-        } else {
-            if (heure > 0) {
-                heure -= 1;
-                minute = 59;
-                seconde = 59;
-
-            }
-        }
-    }
-    elmt.textContent = `${heure}:${minute}:${seconde}`;
-    setTimeout(fctMinuteur, 1000, elmt);
-}
-
-class Minuteur {
-    constructor (heure, minute, seconde) {
-        this.heure = heure;
-        this.minute = minute;
-        this.seconde = seconde;
-    }
-
-}
+// function getFctMinuteur(o_, elmt) {
+//     /*
+//     Permet de d'utiliser la fonction dans le setTimeout si la fonction est une fonction de classe
+//      */
+//     return o_.fctMinuteur(elmt);
+// }
 
 
 
 
 
 
-// TODO: suite du cours pour pouvoir afficher le chrono
+
+
