@@ -1,31 +1,58 @@
+let listMinuteurs = [];
+
+function pauseMinuteur() {
+    listMinuteurs[0].changementBouton();
+    listMinuteurs[0].changePause();
+}
+
 function validerMinuteur () {
+    //TODO mettre le type de minuteur en parametre si besoin pour celui à interval
+    if (existe("affichageMinuteur") === false){
+        // Minuteur jamais lancé
+        let minuteur = document.getElementById("minuteurSimple");
+        let ElmtsMinuteur = blocsMinuteur();
+        // heure, minute, seconde
 
-    let minuteur = document.getElementById("minuteurSimple");
+        // Verifications des valeurs des champs
+        ElmtsMinuteur.heure.value = verif(ElmtsMinuteur.heure.value, "heure");
+        ElmtsMinuteur.minute.value = verif(ElmtsMinuteur.minute.value, "minute");
+        ElmtsMinuteur.seconde.value = verif(ElmtsMinuteur.seconde.value, "seconde");
 
-    let heureElmt = document.querySelector("#minuteurSimple #heure");
-    let minuteElmt = document.querySelector("#minuteurSimple #minute");
-    let secondeElmt = document.querySelector("#minuteurSimple #seconde");
+        let minuteurObjet = new Minuteur(parseInt(ElmtsMinuteur.heure.value), parseInt(ElmtsMinuteur.minute.value), parseInt(ElmtsMinuteur.seconde.value), "minuteurSimple");
+        listMinuteurs[0] = minuteurObjet;
 
+        // Creation du div d'affichage
+        let minuteurElmt = document.createElement("p");
+        minuteurElmt.id = "affichageMinuteur";
+        minuteurElmt.textContent += `${minuteurObjet.heure}:${minuteurObjet.minute}:${minuteurObjet.seconde}`;
 
-    heureElmt.value = verif(heureElmt.value, "heure");
-    minuteElmt.value = verif(minuteElmt.value, "minute");
-    secondeElmt.value = verif(secondeElmt.value, "seconde");
-
-    let minuteurObjet = new Minuteur(parseInt(heureElmt.value), parseInt(minuteElmt.value), parseInt(secondeElmt.value));
-
-    let minuteurElmt = document.createElement("p");
-    minuteurElmt.id = "affichageMinuteur";
-    minuteurElmt.textContent += `${minuteurObjet.heure}:${minuteurObjet.minute}:${minuteurObjet.seconde}`;
-
-
-    if (existe("affichageMinuteur")) {
-        minuteur.replaceChild(minuteurElmt, document.getElementById("affichageMinuteur"));
-    } else {
+        // if (existe("affichageMinuteur")) {
+        //     minuteur.replaceChild(minuteurElmt, document.getElementById("affichageMinuteur"));
+        // } else {
+        //     minuteur.appendChild(minuteurElmt);
+        // }
         minuteur.appendChild(minuteurElmt);
-    }
 
-    let affichageMinuteurElmt = document.getElementById("affichageMinuteur");
-    setTimeout(Minuteur.fctMinuteur, 1000, minuteurObjet, affichageMinuteurElmt);
+        minuteurObjet.changementBouton();
+
+        let affichageMinuteurElmt = document.getElementById("affichageMinuteur");
+        setTimeout(Minuteur.fctMinuteur, 1000, minuteurObjet, affichageMinuteurElmt);
+
+        //TODO: voir pour truc asynchrone ? (pour que le changement sur le bouton ne se fasse que a la fin du chrono ?
+        //minuteurObjet.changementBouton();
+    } else {
+        // Minuteur déjà lancé et mis en pause
+        let affichageMinuteurElmt = document.getElementById("affichageMinuteur");
+        let minuteur = affichageMinuteurElmt.textContent.split(":");
+        let minuteurObjet = new Minuteur(minuteur[0], minuteur[1], minuteur[2], "minuteurSimple");
+        listMinuteurs[0] = minuteurObjet;
+
+        minuteurObjet.changementBouton();
+
+        setTimeout(Minuteur.fctMinuteur, 1000, minuteurObjet, affichageMinuteurElmt);
+        //TODO: voir pour truc asynchrone ? (pour que le changement sur le bouton ne se fasse que a la fin du chrono ?
+        //minuteurObjet.changementBouton();
+    }
 }
 
 function existe (id) {
@@ -66,27 +93,46 @@ function verif (n, type) {
 
 }
 
+function blocsMinuteur () {
+    let heureElmt = document.querySelector("#minuteurSimple #heure");
+    let minuteElmt = document.querySelector("#minuteurSimple #minute");
+    let secondeElmt = document.querySelector("#minuteurSimple #seconde");
+
+    return {heure: heureElmt, minute: minuteElmt, seconde: secondeElmt};
+}
+
 function resetMinuteur() {
-    let minuteur = document.getElementById("minuteur");
+    let minuteur = document.getElementById("minuteurSimple");
 
-    let heure = document.querySelector("#minuteur #heure");
-    let minute = document.querySelector("#minuteur #minute");
-    let seconde = document.querySelector("#minuteur #seconde");
+    let ElmtsMinuteur = blocsMinuteur();
 
-    resetUnit(heure);
-    resetUnit(minute);
-    resetUnit(seconde);
+    resetUnit(ElmtsMinuteur.heure);
+    resetUnit(ElmtsMinuteur.minute);
+    resetUnit(ElmtsMinuteur.seconde);
 
     if (existe("affichageMinuteur"))
         minuteur.removeChild(document.getElementById("affichageMinuteur"));
+
+    let bouton = document.querySelector(`#${minuteur.id} #boutonMinuteurValider`);
+    bouton.textContent = 'Lancer';
+    listMinuteurs[0].pause = false;
 }
 
 function resetUnit (elmt) {
     elmt.value = 0;
 }
 
-// let boutonMinuteur = document.getElementById("boutonMinuteurValider");
-// boutonMinuteur.addEventListener("click", minuteur);
+let boutonMinuteur = document.getElementById("boutonMinuteurValider");
+boutonMinuteur.addEventListener("click", function (e) {
+    let bouton = e.target;
+    if (bouton.textContent === "Lancer") {
+        validerMinuteur();
+    } else if (bouton.textContent === "Pause") {
+        pauseMinuteur();
+    } else {
+        alert("erreur au lancement du minuteur")
+    }
+});
 
 // let boutonResetMinuteur = document.getElementById("boutonMinuteurReset");
 // boutonResetMinuteur.addEventListener("click", resetMinuteur);
