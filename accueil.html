@@ -5,10 +5,10 @@
     <title>Minuteur à intervalles</title>
 </head>
 <body>
-    <div id="minuteurSimple">
+    <div id="divMinuteurSimple">
         <h1>Minuteur</h1>
 
-        <form>
+        <form id="formMinuteurSimple">
             <label>HH
                 <input id="heure" max=12 min=0 type="number" value="0">
             </label>
@@ -19,7 +19,7 @@
                 <input id="seconde" max=59 min=0 type="number" value="0">
             </label>
             <button id="boutonMinuteurValider" type="submit">Lancer</button>
-            <button id="boutonMinuteurReset" onclick="resetMinuteur()" type="reset">Reset</button>
+            <button id="boutonMinuteurReset" onclick="resetMinuteur()" type="button">Reset</button>
         </form>
     </div>
 

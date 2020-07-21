@@ -61,13 +61,25 @@ class Minuteur {
         }
     }
 
-    changementBouton () {
+    changementBoutonValider () {
         let minuteur = this.type;
-        let bouton = document.querySelector(`#${minuteur} #boutonMinuteurValider`);
+        let bouton = document.querySelector(`#div${minuteur} #boutonMinuteurValider`);
         if (bouton.textContent === 'Lancer') {
             bouton.textContent = 'Pause';
         } else if (bouton.textContent === 'Pause') {
             bouton.textContent = 'Lancer';
+        }
+    }
+
+    changementBoutonReset () {
+        let minuteur = this.type;
+        let bouton = document.querySelector(`#div${minuteur} #boutonMinuteurReset`);
+        if (bouton.textContent === 'Reset') {
+            bouton.textContent = 'Arrêter';
+        } else if (bouton.textContent === 'Arrêter') {
+            bouton.textContent = 'Reset';
+            this.changementBoutonValider();
+            this.pause = false;
         }
     }
 }

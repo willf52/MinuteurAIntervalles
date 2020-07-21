@@ -1,24 +1,27 @@
-let listMinuteurs = [];
+let listMinuteurs = []; // index 0 pour minuteur simple, 1, 2, ... pour intervalles ?
 
 function pauseMinuteur() {
-    listMinuteurs[0].changementBouton();
-    listMinuteurs[0].changePause();
+    listMinuteurs[0].changementBoutonValider(); // change le visuel du bouton
+    listMinuteurs[0].changePause(); // change le statut pause du minuteur
 }
 
 function validerMinuteur () {
     //TODO mettre le type de minuteur en parametre si besoin pour celui à interval
     if (existe("affichageMinuteur") === false){
         // Minuteur jamais lancé
-        let minuteur = document.getElementById("minuteurSimple");
-        let ElmtsMinuteur = blocsMinuteur();
+        let minuteur = document.getElementById("divMinuteurSimple");
+        let formMinuteur = document.getElementById("formMinuteurSimple");
         // heure, minute, seconde
 
         // Verifications des valeurs des champs
-        ElmtsMinuteur.heure.value = verif(ElmtsMinuteur.heure.value, "heure");
-        ElmtsMinuteur.minute.value = verif(ElmtsMinuteur.minute.value, "minute");
-        ElmtsMinuteur.seconde.value = verif(ElmtsMinuteur.seconde.value, "seconde");
+        formMinuteur.elements.heure.value = verif(formMinuteur.elements.heure.value, "heure");
+        formMinuteur.elements.minute.value = verif(formMinuteur.elements.minute.value, "minute");
+        formMinuteur.elements.seconde.value = verif(formMinuteur.elements.seconde.value, "seconde");
 
-        let minuteurObjet = new Minuteur(parseInt(ElmtsMinuteur.heure.value), parseInt(ElmtsMinuteur.minute.value), parseInt(ElmtsMinuteur.seconde.value), "minuteurSimple");
+        let minuteurObjet = new Minuteur(parseInt(formMinuteur.elements.heure.value),
+                                            parseInt(formMinuteur.elements.minute.value),
+                                            parseInt(formMinuteur.elements.seconde.value),
+                                        'MinuteurSimple');
         listMinuteurs[0] = minuteurObjet;
 
         // Creation du div d'affichage
@@ -31,9 +34,14 @@ function validerMinuteur () {
         // } else {
         //     minuteur.appendChild(minuteurElmt);
         // }
+        // Ajout à l'html
         minuteur.appendChild(minuteurElmt);
 
-        minuteurObjet.changementBouton();
+        // Change le bouton Lancer -> Pause
+        minuteurObjet.changementBoutonValider();
+        minuteurObjet.changementBoutonReset();
+
+        activerDesactiverChamps(formMinuteur.elements);
 
         let affichageMinuteurElmt = document.getElementById("affichageMinuteur");
         setTimeout(Minuteur.fctMinuteur, 1000, minuteurObjet, affichageMinuteurElmt);
@@ -44,10 +52,10 @@ function validerMinuteur () {
         // Minuteur déjà lancé et mis en pause
         let affichageMinuteurElmt = document.getElementById("affichageMinuteur");
         let minuteur = affichageMinuteurElmt.textContent.split(":");
-        let minuteurObjet = new Minuteur(minuteur[0], minuteur[1], minuteur[2], "minuteurSimple");
+        let minuteurObjet = new Minuteur(minuteur[0], minuteur[1], minuteur[2], "MinuteurSimple");
         listMinuteurs[0] = minuteurObjet;
 
-        minuteurObjet.changementBouton();
+        minuteurObjet.changementBoutonValider();
 
         setTimeout(Minuteur.fctMinuteur, 1000, minuteurObjet, affichageMinuteurElmt);
         //TODO: voir pour truc asynchrone ? (pour que le changement sur le bouton ne se fasse que a la fin du chrono ?
@@ -93,33 +101,41 @@ function verif (n, type) {
 
 }
 
-function blocsMinuteur () {
-    let heureElmt = document.querySelector("#minuteurSimple #heure");
-    let minuteElmt = document.querySelector("#minuteurSimple #minute");
-    let secondeElmt = document.querySelector("#minuteurSimple #seconde");
+function resetMinuteur () {
+    if (existe("affichageMinuteur")) {
+        // Minuteur déjà lancé, lancé ou en pause, Bouton Arrêter
+        let minuteur = document.getElementById("divMinuteurSimple");
+        let formMinuteur = document.getElementById("formMinuteurSimple");
 
-    return {heure: heureElmt, minute: minuteElmt, seconde: secondeElmt};
-}
-
-function resetMinuteur() {
-    let minuteur = document.getElementById("minuteurSimple");
-
-    let ElmtsMinuteur = blocsMinuteur();
-
-    resetUnit(ElmtsMinuteur.heure);
-    resetUnit(ElmtsMinuteur.minute);
-    resetUnit(ElmtsMinuteur.seconde);
-
-    if (existe("affichageMinuteur"))
         minuteur.removeChild(document.getElementById("affichageMinuteur"));
 
-    let bouton = document.querySelector(`#${minuteur.id} #boutonMinuteurValider`);
-    bouton.textContent = 'Lancer';
-    listMinuteurs[0].pause = false;
+        let boutonReset =  document.querySelector(`#${minuteur.id} #boutonMinuteurReset`);
+        boutonReset.textContent = 'Reset';
+
+        let boutonValider = document.querySelector(`#${minuteur.id} #boutonMinuteurValider`);
+        boutonValider.textContent = 'Lancer';
+        listMinuteurs[0].pause = false;
+
+        activerDesactiverChamps(formMinuteur.elements);
+    } else {
+        // Minuteur jamais lancé ou reset, Bouton Reset
+        let minuteur = document.getElementById("divMinuteurSimple");
+        let formMinuteur = document.getElementById("formMinuteurSimple");
+
+        resetUnit(formMinuteur.elements.heure);
+        resetUnit(formMinuteur.elements.minute);
+        resetUnit(formMinuteur.elements.seconde);
+    }
 }
 
 function resetUnit (elmt) {
     elmt.value = 0;
+}
+
+function activerDesactiverChamps (formElmts) {
+    formElmts.heure.disabled = !formElmts.heure.disabled;
+    formElmts.minute.disabled = !formElmts.minute.disabled;
+    formElmts.seconde.disabled = !formElmts.seconde.disabled;
 }
 
 let boutonMinuteur = document.getElementById("boutonMinuteurValider");
@@ -145,7 +161,6 @@ for (let f of forms) {
         e.preventDefault();
     });
 }
-
 
 // function getFctMinuteur(o_, elmt) {
 //     /*
