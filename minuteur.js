@@ -63,7 +63,7 @@ class Minuteur {
 
     changementBoutonValider () {
         let minuteur = this.type;
-        let bouton = document.querySelector(`#div${minuteur} #boutonMinuteurValider`);
+        let bouton = document.querySelector(`#div${minuteur} .boutonMinuteurValider`);
         if (bouton.textContent === 'Lancer') {
             bouton.textContent = 'Pause';
         } else if (bouton.textContent === 'Pause') {
@@ -73,7 +73,7 @@ class Minuteur {
 
     changementBoutonReset () {
         let minuteur = this.type;
-        let bouton = document.querySelector(`#div${minuteur} #boutonMinuteurReset`);
+        let bouton = document.querySelector(`#div${minuteur} .boutonMinuteurReset`);
         if (bouton.textContent === 'Reset') {
             bouton.textContent = 'Arrêter';
         } else if (bouton.textContent === 'Arrêter') {
