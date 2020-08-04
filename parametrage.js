@@ -10,9 +10,8 @@ function pauseMinuteur (type) {
     }
 }
 
-function validerMinuteur () {
-    //TODO mettre le type de minuteur en parametre si besoin pour celui à interval
-    if (existe("affichageMinuteur") === false){
+function validerMinuteur (type) {
+    if (estVide(`#div${type} .affichageMinuteur`) === true){
         // Minuteur jamais lancé
         let minuteur = document.getElementById(`div${type}`);
         let formMinuteur = document.getElementById(`form${type}`);
