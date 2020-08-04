@@ -55,13 +55,12 @@ function validerMinuteur () {
             minuteurObjet = listMinuteurs[1];
         }
 
-        // Creation du div d'affichage
-        let minuteurElmt = document.createElement("p");
-        minuteurElmt.id = "affichageMinuteur";
-        minuteurElmt.textContent += `${minuteurObjet.heure}:${minuteurObjet.minute}:${minuteurObjet.seconde}`;
+        // Récupération du div d'affichage
+        let minuteurElmt = document.querySelector(`#div${type} .affichageMinuteur`);
 
-        // Ajout à l'html
-        minuteur.appendChild(minuteurElmt);
+        // Ajout du texte
+        // minuteurElmt.setAttribute("innerText", `${minuteurObjet.heure}:${minuteurObjet.minute}:${minuteurObjet.seconde}`);
+        minuteurElmt.textContent = `${minuteurObjet.heure}:${minuteurObjet.minute}:${minuteurObjet.seconde}`;
 
         // Change le bouton Lancer -> Pause
         minuteurObjet.changementBoutonValider();
@@ -69,14 +68,14 @@ function validerMinuteur () {
 
         activerDesactiverChamps(formMinuteur.elements, type);
 
-        let affichageMinuteurElmt = document.getElementById("affichageMinuteur");
+        let affichageMinuteurElmt = minuteur.querySelector(".affichageMinuteur");
         setTimeout(Minuteur.fctMinuteur, 1000, minuteurObjet, affichageMinuteurElmt);
 
         //TODO: voir pour truc asynchrone ? (pour que le changement sur le bouton ne se fasse que a la fin du chrono ?
         //minuteurObjet.changementBouton();
     } else {
         // Minuteur déjà lancé et mis en pause
-        let affichageMinuteurElmt = document.getElementById("affichageMinuteur");
+        let affichageMinuteurElmt = document.querySelector(`#div${type} .affichageMinuteur`);
         let minuteur = affichageMinuteurElmt.textContent.split(":");
         let minuteurObjet = new Minuteur(minuteur[0], minuteur[1], minuteur[2], type);
         if (type === "MinuteurSimple") {
@@ -93,8 +92,9 @@ function validerMinuteur () {
     }
 }
 
-function existe (id) {
-    return document.getElementById(id) !== null;
+function estVide (selector) {
+    let elmt = document.querySelector(selector);
+    return elmt.textContent === "";
 }
 
 function verif (n, type) {
@@ -149,12 +149,13 @@ function resetMinuteur (type) {
     }
 }
 
-function arretMinuteur (type) { // TODO: probleme avec le bouton arreter -> fait un reset non désirer !
+function arretMinuteur (type) {
     // Minuteur déjà lancé, lancé ou en pause, Bouton Arrêter
     let minuteur = document.getElementById(`div${type}`);
     let formMinuteur = document.getElementById(`form${type}`);
 
-    minuteur.removeChild(document.getElementById("affichageMinuteur"));
+    let affichage = minuteur.querySelector(`#div${type} .affichageMinuteur`);
+    affichage.textContent = "";
 
     let boutonReset =  document.querySelector(`#${minuteur.id} .boutonMinuteurReset`);
     boutonReset.textContent = 'Reset';
@@ -163,8 +164,10 @@ function arretMinuteur (type) { // TODO: probleme avec le bouton arreter -> fait
     boutonValider.textContent = 'Lancer';
     if (type === "MinuteurSimple") {
         listMinuteurs[0].pause = false;
+        listMinuteurs[0].deleted = true;
     } else if (type === "MinuteurIntervalle") {
         listMinuteurs[1].pause = false;
+        listMinuteurs[1].deleted = true;
     }
 
     activerDesactiverChamps(formMinuteur.elements, type);
@@ -245,12 +248,13 @@ boutonResetMinuteurI.addEventListener("click", function (e) {
 // Annuler l'envoi automatique des formulaire sur une autre page
 let forms = document.getElementsByTagName("form");
 for (let f of forms) {
+    // Annuler l'envoi automatique des formulaire sur une autre page
     f.addEventListener("submit", function (e) {
         e.preventDefault();
     });
 }
 
-
+// TODO: voir pour rechercher si les minuteurs sont à 00:00:00 (0:0:0)
 
 
 

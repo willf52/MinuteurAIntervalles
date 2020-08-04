@@ -5,6 +5,7 @@ class Minuteur {
         this.seconde = seconde;
         this.type = type;
         this.pause = pause;
+        this.deleted = false;
     }
 
     getH() {
@@ -37,6 +38,9 @@ class Minuteur {
 
     // Défilement du minuteur
     static fctMinuteur(minuteur, elmt) {
+        if (minuteur.deleted) {
+            return;
+        }
         if (minuteur.pause === false) {
             if (minuteur.getS() > 0) {
                 minuteur.seconde -= 1;
