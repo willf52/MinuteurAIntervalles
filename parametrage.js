@@ -244,18 +244,37 @@ boutonResetMinuteurI.addEventListener("click", function (e) {
     }
 });
 
-// Annuler l'envoi automatique des formulaire sur une autre page
+// TODO: voir pour rechercher si les minuteurs sont à 00:00:00 (0:0:0)
+
+function estFini (mutationList, mutationObject) {
+    for (let mutation of mutationList) {
+        if (mutation.type === 'childList') {
+            if (mutation.target.textContent === "0:0:0") {
+                console.log("STOP !")
+            }
+        }
+    }
+}
+
+let divs = document.getElementsByClassName("cadreMinuteurs");
+for (let d of divs) {
+// Verifier si les minuteurs sont fini
+// Utilisé probablement les MutationObserver
+// https://developer.mozilla.org/fr/docs/Web/API/MutationObserver
+    let affichage = document.querySelector(`#${d.id} .affichageMinuteur`);
+    let observer = new MutationObserver(estFini);
+    let option = { characterData: false, attributes: false, childList: true, subtree: false };
+    observer.observe(affichage, option);
+}
+
+
 let forms = document.getElementsByTagName("form");
 for (let f of forms) {
-    // Annuler l'envoi automatique des formulaire sur une autre page
+    // Annuler l'envoi automatique des formulaires sur une autre page
     f.addEventListener("submit", function (e) {
         e.preventDefault();
     });
 }
-
-// TODO: voir pour rechercher si les minuteurs sont à 00:00:00 (0:0:0)
-
-
 
 
 
