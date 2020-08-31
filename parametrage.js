@@ -1,6 +1,7 @@
 let listMinuteurs = []; // index 0 pour minuteur simple, 1, 2, ... pour intervalles ?
 
 function pauseMinuteur (type) {
+    // TODO: la pause ne fonctionne pas si mise en pause à zero (car c'edst la seconde d'attente avant la fin de chrono)
     if (type === "MinuteurSimple") {
         listMinuteurs[0].changementBoutonValider(); // change le visuel du bouton
         listMinuteurs[0].changePause(); // change le statut pause du minuteur
@@ -9,6 +10,57 @@ function pauseMinuteur (type) {
         listMinuteurs[1].changePause(); // change le statut pause du minuteur
     }
 }
+
+function finMinuteur () {
+    let type;
+    if (listMinuteurs[0] && listMinuteurs[0].estNul()) {
+        type = "MinuteurSimple"
+    } else if (listMinuteurs[1].estNul()) {
+        type = "MinuteurIntervalle"
+    }
+
+    let minuteur = document.querySelector(`#div${type}`);
+    // let affichageMinuteurElmt = document.querySelector(`#div${type} .affichageMinuteur`);
+    let formMinuteur = document.getElementById(`form${type}`);
+
+    if (type === "MinuteurIntervalle") {
+        if (listMinuteurs[2]) {
+            listMinuteurs[1].pause = false;
+            listMinuteurs[1].deleted = true;
+            // Minuteur (sauf dernier) d'un Minuteur à intervalle
+            listMinuteurs.splice(1, 1); // supprimer le minuteur terminé
+            debutMinuteur(type, listMinuteurs[1], minuteur, formMinuteur, false)
+        } else {
+            // Dernier minuteur d'un Minuteur à intervalle
+            arretMinuteur(type);
+        }
+    } else if (type === "MinuteurSimple") {
+        arretMinuteur(type);
+    }
+}
+
+function debutMinuteur (type, minuteurObjet, minuteur, formMinuteur, firstMinuteur = true) {
+    // Lance concrètement le décompte
+
+    // Récupération du div d'affichage
+    let minuteurElmt = document.querySelector(`#div${type} .affichageMinuteur`);
+
+    // Ajout du texte
+    minuteurElmt.textContent = `${minuteurObjet.heure}:${minuteurObjet.minute}:${minuteurObjet.seconde}`;
+
+    if (firstMinuteur) { // Si c'est le premier minuteur de la liste (pour minuteur à intervalle notamment
+        // Change le bouton Lancer -> Pause
+        minuteurObjet.changementBoutonValider();
+        minuteurObjet.changementBoutonReset();
+
+        activerDesactiverChamps(formMinuteur.elements, type);
+
+    }
+
+    let affichageMinuteurElmt = minuteur.querySelector(`#div${type} .affichageMinuteur`);
+    setTimeout(Minuteur.fctMinuteur, 1000, minuteurObjet, affichageMinuteurElmt);
+}
+
 
 function validerMinuteur (type) {
     if (estVide(`#div${type} .affichageMinuteur`) === true){
@@ -38,7 +90,8 @@ function validerMinuteur (type) {
                 parseInt(formMinuteur.elements.seconde.value), type);
             listMinuteurs[0] = minuteurObjet;
         } else if (type === "MinuteurIntervalle") {
-            for (let i = 1; i <= formMinuteur.elements.nbSeries.value; i += 3) {
+            const nbSerie = parseInt(formMinuteur.elements.nbSeries.value);
+            for (let i = 1; i < (nbSerie * 4) + 1; i += 4) {
                 minuteurObjet = new Minuteur(0, 0,
                     parseInt(formMinuteur.elements.transition.value), type);
                 listMinuteurs[i] = minuteurObjet;
@@ -46,48 +99,33 @@ function validerMinuteur (type) {
                     parseInt(formMinuteur.elements.minuteT.value),
                     parseInt(formMinuteur.elements.secondeT.value), type);
                 listMinuteurs[i+1] = minuteurObjet;
+                minuteurObjet = new Minuteur(0, 0,
+                    parseInt(formMinuteur.elements.transition.value), type);
+                listMinuteurs[i+2] = minuteurObjet;
                 minuteurObjet = new Minuteur(0,
                     parseInt(formMinuteur.elements.minuteR.value),
                     parseInt(formMinuteur.elements.secondeR.value), type);
-                listMinuteurs[i+2] = minuteurObjet;
+                listMinuteurs[i+3] = minuteurObjet;
             }
             minuteurObjet = listMinuteurs[1];
         }
 
-        // Récupération du div d'affichage
-        let minuteurElmt = document.querySelector(`#div${type} .affichageMinuteur`);
+        debutMinuteur(type, minuteurObjet, minuteur, formMinuteur);
 
-        // Ajout du texte
-        // minuteurElmt.setAttribute("innerText", `${minuteurObjet.heure}:${minuteurObjet.minute}:${minuteurObjet.seconde}`);
-        minuteurElmt.textContent = `${minuteurObjet.heure}:${minuteurObjet.minute}:${minuteurObjet.seconde}`;
-
-        // Change le bouton Lancer -> Pause
-        minuteurObjet.changementBoutonValider();
-        minuteurObjet.changementBoutonReset();
-
-        activerDesactiverChamps(formMinuteur.elements, type);
-
-        let affichageMinuteurElmt = minuteur.querySelector(".affichageMinuteur");
-        setTimeout(Minuteur.fctMinuteur, 1000, minuteurObjet, affichageMinuteurElmt);
-
-        //TODO: voir pour truc asynchrone ? (pour que le changement sur le bouton ne se fasse que a la fin du chrono ?
-        //minuteurObjet.changementBouton();
     } else {
         // Minuteur déjà lancé et mis en pause
         let affichageMinuteurElmt = document.querySelector(`#div${type} .affichageMinuteur`);
-        let minuteur = affichageMinuteurElmt.textContent.split(":");
-        let minuteurObjet = new Minuteur(minuteur[0], minuteur[1], minuteur[2], type);
+        let minuteurObjet;
         if (type === "MinuteurSimple") {
-            listMinuteurs[0] = minuteurObjet;
+            minuteurObjet = listMinuteurs[0];
         } else if (type === "MinuteurIntervalle") {
-            listMinuteurs[1] = minuteurObjet;
+            minuteurObjet = listMinuteurs[1];
         }
 
+        minuteurObjet.changePause(); // enlève la pause
         minuteurObjet.changementBoutonValider();
 
         setTimeout(Minuteur.fctMinuteur, 1000, minuteurObjet, affichageMinuteurElmt);
-        //TODO: voir pour truc asynchrone ? (pour que le changement sur le bouton ne se fasse que a la fin du chrono ?
-        //minuteurObjet.changementBouton();
     }
 }
 
@@ -167,6 +205,7 @@ function arretMinuteur (type) {
     } else if (type === "MinuteurIntervalle") {
         listMinuteurs[1].pause = false;
         listMinuteurs[1].deleted = true;
+        listMinuteurs.splice(1, listMinuteurs.length-1); // supprimer les minuteurs qui étaient en attentes
     }
 
     activerDesactiverChamps(formMinuteur.elements, type);
@@ -244,13 +283,13 @@ boutonResetMinuteurI.addEventListener("click", function (e) {
     }
 });
 
-// TODO: voir pour rechercher si les minuteurs sont à 00:00:00 (0:0:0)
 
 function estFini (mutationList, mutationObject) {
+    // Permet de détecter la fin d'un minuteur
     for (let mutation of mutationList) {
         if (mutation.type === 'childList') {
             if (mutation.target.textContent === "0:0:0") {
-                console.log("STOP !")
+                setTimeout(finMinuteur, 1000);
             }
         }
     }
@@ -258,9 +297,6 @@ function estFini (mutationList, mutationObject) {
 
 let divs = document.getElementsByClassName("cadreMinuteurs");
 for (let d of divs) {
-// Verifier si les minuteurs sont fini
-// Utilisé probablement les MutationObserver
-// https://developer.mozilla.org/fr/docs/Web/API/MutationObserver
     let affichage = document.querySelector(`#${d.id} .affichageMinuteur`);
     let observer = new MutationObserver(estFini);
     let option = { characterData: false, attributes: false, childList: true, subtree: false };

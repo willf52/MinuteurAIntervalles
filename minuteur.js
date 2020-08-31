@@ -5,7 +5,7 @@ class Minuteur {
         this.seconde = seconde;
         this.type = type;
         this.pause = pause;
-        this.deleted = false;
+        this.deleted = false; // Permet d'arrêter le décompte des minuteurs si arrêté ou fini
     }
 
     getH() {
@@ -32,6 +32,10 @@ class Minuteur {
         this.seconde = s;
     }
 
+    estNul () {
+        return (this.heure === 0 && this.minute === 0 && this.seconde === 0)
+    }
+
     changePause() {
         this.pause = !this.pause;
     }
@@ -39,6 +43,7 @@ class Minuteur {
     // Défilement du minuteur
     static fctMinuteur(minuteur, elmt) {
         if (minuteur.deleted) {
+            // Permet d'arrêter le décompte des minuteurs si arrêté ou fini
             return;
         }
         if (minuteur.pause === false) {
