@@ -1,24 +1,21 @@
 let listMinuteurs = []; // index 0 pour minuteur simple, 1, 2, ... pour intervalles ?
 
 function pauseMinuteur (type) {
-    // TODO: la pause ne fonctionne pas si mise en pause à zero (car c'edst la seconde d'attente avant la fin de chrono)
     if (type === "MinuteurSimple") {
         listMinuteurs[0].changementBoutonValider(); // change le visuel du bouton
         listMinuteurs[0].changePause(); // change le statut pause du minuteur
     } else if (type === "MinuteurIntervalle") {
-        listMinuteurs[1].changementBoutonValider(); // change le visuel du bouton
-        listMinuteurs[1].changePause(); // change le statut pause du minuteur
+        if (listMinuteurs[1].estNul()) { // pour permettre la pause à 0:0:0 (seconde d'attente dans estFini()
+            listMinuteurs[2].changementBoutonValider(); // change le visuel du bouton
+            listMinuteurs[2].changePause(); // change le statut pause du minuteur
+        } else {
+            listMinuteurs[1].changementBoutonValider(); // change le visuel du bouton
+            listMinuteurs[1].changePause(); // change le statut pause du minuteur
+        }
     }
 }
 
-function finMinuteur () {
-    let type;
-    if (listMinuteurs[0] && listMinuteurs[0].estNul()) {
-        type = "MinuteurSimple"
-    } else if (listMinuteurs[1].estNul()) {
-        type = "MinuteurIntervalle"
-    }
-
+function finMinuteur (type) {
     let minuteur = document.querySelector(`#div${type}`);
     // let affichageMinuteurElmt = document.querySelector(`#div${type} .affichageMinuteur`);
     let formMinuteur = document.getElementById(`form${type}`);
@@ -253,7 +250,7 @@ boutonResetMinuteur.addEventListener("click", function (e) {
     } else if (bouton.textContent === "Reset") {
         resetMinuteur("MinuteurSimple");
     } else {
-        alert("erreur au lancement du minuteur")
+        alert("erreur à l'arrêt du minuteur")
     }
 });
 
@@ -279,7 +276,7 @@ boutonResetMinuteurI.addEventListener("click", function (e) {
     } else if (bouton.textContent === "Reset") {
         resetMinuteur("MinuteurIntervalle");
     } else {
-        alert("erreur au lancement du minuteur")
+        alert("erreur à l'arrêt du minuteur")
     }
 });
 
@@ -289,7 +286,14 @@ function estFini (mutationList, mutationObject) {
     for (let mutation of mutationList) {
         if (mutation.type === 'childList') {
             if (mutation.target.textContent === "0:0:0") {
-                setTimeout(finMinuteur, 1000);
+                const idParent = mutation.target.parentElement.id;
+                let type;
+                if (idParent === "divMinuteurSimple") {
+                    type = "MinuteurSimple";
+                } else if (idParent === "divMinuteurIntervalle") {
+                    type = "MinuteurIntervalle";
+                }
+                setTimeout(finMinuteur, 1000, type);
             }
         }
     }
