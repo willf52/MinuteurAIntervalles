@@ -91,7 +91,7 @@ function validerMinuteur (type) {
             for (let i = 1; i < (nbSerie * 4) + 1; i += 4) {
                 minuteurObjet = new Minuteur(0, 0,
                     parseInt(formMinuteur.elements.transition.value), type);
-                listMinuteurs[i] = minuteurObjet;
+                 listMinuteurs[i] = minuteurObjet;
                 minuteurObjet = new Minuteur(0,
                     parseInt(formMinuteur.elements.minuteT.value),
                     parseInt(formMinuteur.elements.secondeT.value), type);
@@ -104,6 +104,12 @@ function validerMinuteur (type) {
                     parseInt(formMinuteur.elements.secondeR.value), type);
                 listMinuteurs[i+3] = minuteurObjet;
             }
+
+            // Permet d'enlever concrètement les lignes de minuteurs nuls
+            for (let i = 1; i < listMinuteurs.length; i++) {
+                if (listMinuteurs[i].estNul()) listMinuteurs.splice(i, 1)
+            }
+
             minuteurObjet = listMinuteurs[1];
         }
 
