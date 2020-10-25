@@ -127,12 +127,59 @@ form > div {
 }
 
 /* !*TODO: A refaire*!*/
-/*@media screen and (max-width: 408px) {*/
-/*    body {*/
-/*        !*width: 100%;*!*/
-/*        flex-direction: column;*/
-/*    }*/
-/*}*/
+@media screen and (max-width: 1024px) {
+    body {
+        /*width: 100%;*/
+        flex-direction: column;
+        align-items: stretch;
+        /*align-items: center;*/
+    }
+
+    .titreChamps {
+        font-size: 2.5em;
+    }
+
+    .headCard {
+        font-size: 4em;
+    }
+
+    .mdc-text-field__input {
+        font-size: 3em;
+        height: 80px;
+    }
+
+    .mdc-text-field {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .mdc-floating-label {
+        font-size: 2em;
+        line-height: 2.8rem;
+    }
+
+    .mdc-text-field--filled {
+        height: 120px;
+    }
+
+    .mdc-text-field--filled::before {
+        height: 100px;
+    }
+
+    .mdc-text-field .mdc-floating-label {
+        top: 55%;
+    }
+
+    .mdc-button {
+        font-size: 2.5em;
+        height: 80px;
+        border-radius: 10px;
+    }
+
+    .titreChamps, .mdc-text-field, .mdc-button {
+        margin: 8px;
+    }
+}
 
 /*@media screen and (max-width: 828px) and (min-width: 408px) {*/
 /*    body {*/
