@@ -73,20 +73,22 @@ class Minuteur {
     changementBoutonValider () {
         let minuteur = this.type;
         let bouton = document.querySelector(`#div${minuteur} .boutonMinuteurValider`);
-        if (bouton.textContent === 'Lancer') {
-            bouton.textContent = 'Pause';
-        } else if (bouton.textContent === 'Pause') {
-            bouton.textContent = 'Lancer';
+        let labelElmt = bouton.querySelector(".mdc-button__label");
+        if (labelElmt.textContent === 'Lancer') {
+            labelElmt.textContent = 'Pause';
+        } else if (labelElmt.textContent === 'Pause') {
+            labelElmt.textContent = 'Lancer';
         }
     }
 
     changementBoutonReset () {
         let minuteur = this.type;
         let bouton = document.querySelector(`#div${minuteur} .boutonMinuteurReset`);
-        if (bouton.textContent === 'Reset') {
-            bouton.textContent = 'Arrêter';
-        } else if (bouton.textContent === 'Arrêter') {
-            bouton.textContent = 'Reset';
+        let labelElmt = bouton.querySelector(".mdc-button__label");
+        if (labelElmt.textContent === 'Reset') {
+            labelElmt.textContent = 'Arrêter';
+        } else if (labelElmt.textContent === 'Arrêter') {
+            labelElmt.textContent = 'Reset';
             this.changementBoutonValider();
             this.pause = false;
         }

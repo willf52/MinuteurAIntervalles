@@ -1,0 +1,154 @@
+:root {
+    --mdc-theme-primary: #753E01;
+    --mdc-theme-on-primary: #ffffff;
+    --mdc-theme-secondary: #00e676;
+    --mdc-theme-on-secondary: #00b248;
+    --mdc-theme-surface: #ecdeaf;
+    --mdc-theme-on-surface: #0d443e;
+    --mdc-theme-background: #cdfefb;
+    --mdc-theme-on-background: #0d443e;
+}
+
+h1 {
+    text-align: center;
+}
+
+.titreChamps {
+    text-align: center;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+body {
+    background-image: url("./images/background_image_clock.jpg");
+    background-size: 100%;
+    /* --- Container des div .mdc-card --- */
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-items: flex-start; /*pour le petit div à l'interieur, permet de l'avoir aligné en haut avec le plus grand sur la ligne*/
+    /*align-items: stretch;*/ /* idem si on eut qu'iol est la même hauteur*/
+    /* --- --- */
+}
+
+.mdc-card--outlined {
+    /*border-color: black;*/
+    /*border-width: 2px;*/
+    border: none;
+    opacity: 0.95;
+    box-shadow: 0 5px 10px gray;
+    padding: 25px;
+    margin: 20px 10px;
+}
+
+.mdc-card {
+    /* --- Element de body --- */
+    flex-basis: 40%;
+    flex-grow: 1;
+
+    /* --- Container des titres et form --- */
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    /* --- --- */
+    /*width: 100%;*/
+
+}
+
+.headCard {
+    /* --- Element de div .mdc-card --- */
+    flex-basis: 100%;
+    flex-grow: 1;
+
+    /* --- --- */
+
+    margin-top: 0;
+    font-family: Verdana, Geneva, sans-serif;
+    font-weight: normal;
+    /*justify-self: flex-start;*/
+}
+
+form {
+    /* --- Element de div .mdc-card --- */
+    flex-basis: 100%;
+    flex-grow: 1;
+
+    /* --- Container des divs --- */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    /*flex-wrap: nowrap;*/
+    /*height: 90%;*/
+    align-items: center;
+}
+
+form > div {
+    /* --- Element de form --- */
+    flex-basis: 100%;
+    flex-grow: 1;
+    flex-shrink: 0;
+
+    /* --- Container des divs de champs et bouton --- */
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.titreChamps, .mdc-text-field {
+    /* --- Element des divs de champs --- */
+    flex-basis: 30%;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.titreChamps, .mdc-text-field, .mdc-button {
+    margin: 2px;
+}
+
+.unSeulChamps {
+    flex-basis: 60%;
+    /*flex-grow: 2;*/
+}
+.fullwidth {
+    /*width: 100%;*/
+}
+
+.affichageMinuteur {
+    display: none;
+    /*border: solid #753E01 5px;*/
+    border-radius: 20px;
+    padding: 18px;
+    font-family: Verdana, Geneva, sans-serif;
+    letter-spacing: 6px;
+    color: #753E01;
+    background: white;
+    font-weight: bold;
+
+}
+
+/* !*TODO: A refaire*!*/
+/*@media screen and (max-width: 408px) {*/
+/*    body {*/
+/*        !*width: 100%;*!*/
+/*        flex-direction: column;*/
+/*    }*/
+/*}*/
+
+/*@media screen and (max-width: 828px) and (min-width: 408px) {*/
+/*    body {*/
+/*        !*width: 48%;*!*/
+/*        flex-direction: row;*/
+/*    }*/
+
+/*    form > div {*/
+/*        display: flex;*/
+/*        flex-direction: column;*/
+/*    }*/
+/*}*/
+
+/*@media screen and (min-width: 828px) {*/
+/*    body {*/
+/*        !*width: 48%;*!*/
+/*        flex-direction: row;*/
+/*    }*/
+/*}*/

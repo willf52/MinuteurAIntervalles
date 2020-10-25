@@ -3,50 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <title>Minuteur à intervalles</title>
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="divMinuteurSimple" class="cadreMinuteurs">
-        <h1>Minuteur</h1>
+    <div id="divMinuteurSimple" class="cadreMinuteurs mdc-card mdc-card--outlined">
+        <h1 class="headCard">Minuteur</h1>
 
         <form id="formMinuteurSimple">
-            <label>HH
-                <input id="heure" max=12 min=0 type="number" value="0">
-            </label>
-            <label>MM
-                <input id="minute" max=59 min=0 type="number" value="0">
-            </label>
-            <label>SS
-                <input id="seconde" max=59 min=0 type="number" value="0">
-            </label>
-            <button id="boutonMinuteurValider" class="boutonMinuteurValider" type="submit">Lancer</button>
-            <button id="boutonMinuteurReset" class="boutonMinuteurReset" type="button">Reset</button>
+            <div>
+                <label class="mdc-text-field mdc-text-field--filled">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="heureLabel">Heure</span>
+                    <input id="heure" class="mdc-text-field__input" max=12 min=0 type="number" value="0" aria-labelledby="heureLabel">
+                    <span class="mdc-line-ripple"></span>
+                </label>
+                <label class="mdc-text-field mdc-text-field--filled">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="minuteLabel">Minute</span>
+                    <input id="minute" class="mdc-text-field__input" max=59 min=0 type="number" value="0" aria-labelledby="minuteLabel">
+                    <span class="mdc-line-ripple"></span>
+                </label>
+                <label class="mdc-text-field mdc-text-field--filled">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="secondeLabel">Seconde</span>
+                    <input id="seconde" class="mdc-text-field__input" max=59 min=0 type="number" value="0" aria-labelledby="secondeLabel">
+                    <span class="mdc-line-ripple"></span>
+                </label>
+            </div>
+            <div>
+                <button id="boutonMinuteurValider" class="boutonMinuteurValider mdc-button mdc-button--raised" type="submit">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label">Lancer</span>
+                </button>
+                <button id="boutonMinuteurReset" class="boutonMinuteurReset mdc-button mdc-button--outlined" type="button">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label">Reset</span>
+                </button>
+            </div>
         </form>
         <p class="affichageMinuteur"></p>
     </div>
 
-    <div>
-        <div id="divMinuteurIntervalle" class="cadreMinuteurs">
-            <h1>Minuteur à intervalles</h1>
+    <div id="divMinuteurIntervalle" class="cadreMinuteurs mdc-card mdc-card--outlined">
+        <h1 class="headCard">Minuteur à intervalles</h1>
 
-            <form id="formMinuteurIntervalle">
-                <label>Travail
-                    <input id="minuteT" max=59 min=0 type="number" value="0"> : <input id="secondeT" max=59 min=0 type="number" value="0">
+        <form id="formMinuteurIntervalle">
+            <div> <div class="titreChamps">Travail</div>
+                <label class="mdc-text-field mdc-text-field--filled">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="minuteTLabel">Minute</span>
+                    <input id="minuteT" class="mdc-text-field__input" max=59 min=0 type="number" value="0" aria-labelledby="minuteTLabel">
+                    <span class="mdc-line-ripple"></span>
                 </label>
-                <label>Repos
-                    <input id="minuteR" max=59 min=0 type="number" value="0"> : <input id="secondeR" max=59 min=0 type="number" value="0">
+                <label class="mdc-text-field mdc-text-field--filled">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="secondeTLabel">Seconde</span>
+                    <input id="secondeT" class="mdc-text-field__input" max=59 min=0 type="number" value="0" aria-labelledby="secondeTLabel">
+                    <span class="mdc-line-ripple"></span>
                 </label>
-                <label>Transition
-                    <input id="transition" max=10 min=0 type="number" value="0">
+            </div>
+            <div><div class="titreChamps">Pause</div>
+                <label class="mdc-text-field mdc-text-field--filled">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="minuteRLabel">Minute</span>
+                    <input id="minuteR" class="mdc-text-field__input" max=59 min=0 type="number" value="0" aria-labelledby="minuteRLabel">
+                    <span class="mdc-line-ripple"></span>
                 </label>
-                <label>Nombre de series
-                    <input id="nbSeries" min=1 type="number" value="1">
+                <label class="mdc-text-field mdc-text-field--filled">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="secondeRLabel">Seconde</span>
+                    <input id="secondeR" class="mdc-text-field__input" max=59 min=0 type="number" value="0" aria-labelledby="secondeRLabel">
+                    <span class="mdc-line-ripple"></span>
                 </label>
-                <button id="boutonMinuteurIValider" class="boutonMinuteurValider" type="submit">Lancer</button>
-                <button id="boutonMinuteurIReset" class="boutonMinuteurReset" type="button">Reset</button>
-            </form>
-            <p class="affichageMinuteur"></p>
-        </div>
+            </div>
+            <div><div class="titreChamps">Transition</div>
+                <label class="mdc-text-field mdc-text-field--filled unSeulChamps">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="transitionLabel">Seconde</span>
+                    <input id="transition" class="mdc-text-field__input" max=10 min=0 type="number" value="0" aria-labelledby="transitionLabel">
+                    <span class="mdc-line-ripple"></span>
+                </label>
+            </div>
+            <div><div class="titreChamps">Nombre de series</div>
+                <label class="mdc-text-field mdc-text-field--filled unSeulChamps fullwidth">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="nbSeriesLabel">Nombre de series</span>
+                    <input id="nbSeries" class="mdc-text-field__input fullwidth" min=1 type="number" value="1" aria-labelledby="nbSeriesLabel">
+                    <span class="mdc-line-ripple"></span>
+                </label>
+            </div>
+            <div>
+                <button id="boutonMinuteurIValider" class="boutonMinuteurValider mdc-button mdc-button--raised" type="submit">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label">Lancer</span>
+                </button>
+                <button id="boutonMinuteurIReset" class="boutonMinuteurReset mdc-button mdc-button--outlined" type="button">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label">Reset</span>
+                </button>
+            </div>
+        </form>
+        <p class="affichageMinuteur"></p>
     </div>
+    <script src="materialDesign.js"></script>
     <script src="minuteur.js"></script>
     <script src="parametrage.js"></script>
 

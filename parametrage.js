@@ -44,6 +44,7 @@ function debutMinuteur (type, minuteurObjet, minuteur, formMinuteur, firstMinute
 
     // Ajout du texte
     minuteurElmt.textContent = `${minuteurObjet.heure}:${minuteurObjet.minute}:${minuteurObjet.seconde}`;
+    minuteurElmt.style.display = "block";
 
     if (firstMinuteur) { // Si c'est le premier minuteur de la liste (pour minuteur à intervalle notamment
         // Change le bouton Lancer -> Pause
@@ -194,14 +195,17 @@ function arretMinuteur (type) {
     let minuteur = document.getElementById(`div${type}`);
     let formMinuteur = document.getElementById(`form${type}`);
 
-    let affichage = minuteur.querySelector(`#div${type} .affichageMinuteur`);
+    let affichage = document.querySelector(`#div${type} .affichageMinuteur`);
     affichage.textContent = "";
+    affichage.style.display = "none";
 
     let boutonReset =  document.querySelector(`#${minuteur.id} .boutonMinuteurReset`);
-    boutonReset.textContent = 'Reset';
+    let labelResetElmt = boutonReset.querySelector(".mdc-button__label");
+    labelResetElmt.textContent = 'Reset';
 
     let boutonValider = document.querySelector(`#${minuteur.id} .boutonMinuteurValider`);
-    boutonValider.textContent = 'Lancer';
+    let labelValiderElmt = boutonValider.querySelector(".mdc-button__label");
+    labelValiderElmt.textContent = 'Lancer';
     if (type === "MinuteurSimple") {
         listMinuteurs[0].pause = false;
         listMinuteurs[0].deleted = true;
@@ -216,6 +220,7 @@ function arretMinuteur (type) {
 
 function resetUnit (elmt) {
     elmt.value = 0;
+    // TODO: pas sûre que ca marche encore
 }
 
 function activerDesactiverChamps (formElmts, type) {
@@ -239,9 +244,11 @@ function activerDesactiverChamps (formElmts, type) {
 let boutonMinuteur = document.getElementById("boutonMinuteurValider");
 boutonMinuteur.addEventListener("click", function (e) {
     let bouton = e.target;
-    if (bouton.textContent === "Lancer") {
+    bouton = bouton.parentElement;
+    let labelElmt = bouton.querySelector(".mdc-button__label");
+    if (labelElmt.textContent === "Lancer") {
         validerMinuteur("MinuteurSimple");
-    } else if (bouton.textContent === "Pause") {
+    } else if (labelElmt.textContent === "Pause") {
         pauseMinuteur("MinuteurSimple");
     } else {
         alert("erreur au lancement du minuteur")
@@ -251,9 +258,11 @@ boutonMinuteur.addEventListener("click", function (e) {
 let boutonResetMinuteur = document.getElementById("boutonMinuteurReset");
 boutonResetMinuteur.addEventListener("click", function (e) {
     let bouton = e.target;
-    if (bouton.textContent === "Arrêter") {
+    bouton = bouton.parentElement;
+    let labelElmt = bouton.querySelector(".mdc-button__label");
+    if (labelElmt.textContent === "Arrêter") {
         arretMinuteur("MinuteurSimple");
-    } else if (bouton.textContent === "Reset") {
+    } else if (labelElmt.textContent === "Reset") {
         resetMinuteur("MinuteurSimple");
     } else {
         alert("erreur à l'arrêt du minuteur")
@@ -265,9 +274,11 @@ boutonResetMinuteur.addEventListener("click", function (e) {
 let boutonMinuteurI = document.getElementById("boutonMinuteurIValider");
 boutonMinuteurI.addEventListener("click", function (e) {
     let bouton = e.target;
-    if (bouton.textContent === "Lancer") {
+    bouton = bouton.parentElement;
+    let labelElmt = bouton.querySelector(".mdc-button__label");
+    if (labelElmt.textContent === "Lancer") {
         validerMinuteur("MinuteurIntervalle");
-    } else if (bouton.textContent === "Pause") {
+    } else if (labelElmt.textContent === "Pause") {
         pauseMinuteur("MinuteurIntervalle");
     } else {
         alert("erreur au lancement du minuteur")
@@ -277,9 +288,11 @@ boutonMinuteurI.addEventListener("click", function (e) {
 let boutonResetMinuteurI = document.getElementById("boutonMinuteurIReset");
 boutonResetMinuteurI.addEventListener("click", function (e) {
     let bouton = e.target;
-    if (bouton.textContent === "Arrêter") {
+    bouton = bouton.parentElement;
+    let labelElmt = bouton.querySelector(".mdc-button__label");
+    if (labelElmt.textContent === "Arrêter") {
         arretMinuteur("MinuteurIntervalle");
-    } else if (bouton.textContent === "Reset") {
+    } else if (labelElmt.textContent === "Reset") {
         resetMinuteur("MinuteurIntervalle");
     } else {
         alert("erreur à l'arrêt du minuteur")
